@@ -1,9 +1,14 @@
 {
   "version": 2,
-  "public": true,
   "name": "aidconnect-frontend",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/frontend/build/$1" },
-    { "source": "/", "destination": "/frontend/build/index.html" }
+    {
+      "source": "/api/:path*",
+      "destination": "https://aidconnectfinal.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/build/index.html"
+    }
   ]
 }
