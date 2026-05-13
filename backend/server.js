@@ -40,9 +40,23 @@ async function connectDatabase() {
 }
 
 // Middleware
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:3000',
+  /\.vercel\.app$/,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      const allowed = allowedOrigins.some((o) =>
+        o instanceof RegExp ? o.test(origin) : o === origin
+      );
+      if (allowed) return callback(null, true);
+      callback(new Error(`CORS blocked: ${origin}`));
+    },
     credentials: true,
   })
 );
